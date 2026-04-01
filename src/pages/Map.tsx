@@ -161,20 +161,20 @@ const METRO_STATIONS: MetroStation[] = [
   { id:"gostdv", name:"Гостиный двор",     line:"3", lat:59.9334, lng:30.3335, transfers:["nevpr","spask"] },
   { id:"mayak",  name:"Маяковская",        line:"3", lat:59.9316, lng:30.3568 },
   { id:"plaleks",name:"Площадь Александра Невского", line:"3", lat:59.9237, lng:30.3834 },
-  { id:"novoch", name:"Новочеркасская",    line:"3", lat:59.9299, lng:30.4094 },
-  { id:"ladozh", name:"Ладожская",         line:"3", lat:59.9326, lng:30.4393 },
-  { id:"prbol",  name:"Проспект Большевиков", line:"3", lat:59.9210, lng:30.4723 },
-  { id:"udyb",   name:"Улица Дыбенко",     line:"3", lat:59.9143, lng:30.4917 },
+  { id:"elis",   name:"Елизаровская",      line:"3", lat:59.9028, lng:30.4292 },
+  { id:"lom",    name:"Ломоносовская",     line:"3", lat:59.8960, lng:30.4404 },
+  { id:"prolet", name:"Пролетарская",      line:"3", lat:59.8858, lng:30.4698 },
+  { id:"obukhov",name:"Обухово",           line:"3", lat:59.8702, lng:30.4637 },
+  { id:"ryb",    name:"Рыбацкое",          line:"3", lat:59.8310, lng:30.5072 },
 
   // Линия 4 — Правобережная (оранжевая)
   { id:"spask",  name:"Спасская",          line:"4", lat:59.9258, lng:30.3224, transfers:["senn","sad","gostdv","nevpr"] },
   { id:"dos",    name:"Достоевская",       line:"4", lat:59.9258, lng:30.3438, transfers:["vlad"] },
   { id:"ligpr",  name:"Лиговский проспект",line:"4", lat:59.9200, lng:30.3547 },
-  { id:"elis",   name:"Елизаровская",      line:"4", lat:59.9028, lng:30.4292 },
-  { id:"lom",    name:"Ломоносовская",     line:"4", lat:59.8960, lng:30.4404 },
-  { id:"prolet", name:"Пролетарская",      line:"4", lat:59.8858, lng:30.4698 },
-  { id:"obukhov",name:"Обухово",           line:"4", lat:59.8702, lng:30.4637 },
-  { id:"ryb",    name:"Рыбацкое",          line:"4", lat:59.8310, lng:30.5072 },
+  { id:"novoch", name:"Новочеркасская",    line:"4", lat:59.9299, lng:30.4094 },
+  { id:"ladozh", name:"Ладожская",         line:"4", lat:59.9326, lng:30.4393 },
+  { id:"prbol",  name:"Проспект Большевиков", line:"4", lat:59.9210, lng:30.4723 },
+  { id:"udyb",   name:"Улица Дыбенко",     line:"4", lat:59.9143, lng:30.4917 },
 
   // Линия 5 — Фрунзенско-Приморская (фиолетовая)
   { id:"komp",   name:"Комендантский проспект", line:"5", lat:60.0024, lng:30.2587 },
@@ -208,8 +208,8 @@ const METRO_STATIONS: MetroStation[] = [
 const METRO_LINE_ORDER: Record<string, string[]> = {
   "1": ["dev","grazh","akad","polit","plmuzh","les","vyb","plleni","che","plvos","vlad","pusk","tehinst","balt","nar","kzav","aut","lenpr","pvet","yuzap"],
   "2": ["par","prpr","ozer","udel","pion","chre","petro","gor","nevpr","senn","tehinst2","frunz","mvor","elektr","ppob","mos","zvez","kupc"],
-  "3": ["beg","zenit","primorsk","vasil","gostdv","mayak","plaleks","novoch","ladozh","prbol","udyb"],
-  "4": ["spask","dos","ligpr","elis","lom","prolet","obukhov","ryb"],
+  "3": ["beg","zenit","primorsk","vasil","gostdv","mayak","plaleks","elis","lom","prolet","obukhov","ryb"],
+  "4": ["spask","dos","ligpr","novoch","ladozh","prbol","udyb"],
   "5": ["komp","stardv","krest","chkal","sport","gorninst","teatr","admir","sad","zveni","obv","volkov","bukhar","mezhn","prslav","dunaj","shush"],
 };
 
@@ -433,22 +433,50 @@ export default function MapPage() {
       }
     });
 
-    // Рисуем станции
+    // Группируем пересадочные станции: собираем все линии по уникальным координатам
+    // Ключ — строка "lat,lng", значение — набор линий
+    const transferGroups: Map<string, { lines: string[]; names: string[]; lat: number; lng: number }> = new Map();
+
     METRO_STATIONS.forEach(station => {
+      if (station.transfers && station.transfers.length > 0) {
+        const key = `${station.lat.toFixed(4)},${station.lng.toFixed(4)}`;
+        if (!transferGroups.has(key)) {
+          // Собираем все станции на пересадке (сама + её transfers)
+          const allIds = [station.id, ...station.transfers];
+          const uniqueLines: string[] = [];
+          const names: string[] = [];
+          allIds.forEach(sid => {
+            const s = METRO_STATIONS.find(x => x.id === sid);
+            if (s && !uniqueLines.includes(s.line)) {
+              uniqueLines.push(s.line);
+            }
+            if (s && !names.includes(s.name)) {
+              names.push(s.name);
+            }
+          });
+          transferGroups.set(key, { lines: uniqueLines, names, lat: station.lat, lng: station.lng });
+        }
+      }
+    });
+
+    // Рисуем обычные станции (без пересадок)
+    METRO_STATIONS.forEach(station => {
+      const isTransfer = station.transfers && station.transfers.length > 0;
+      if (isTransfer) return; // пересадочные рисуем отдельно
+
       const color = METRO_LINE_COLORS[station.line];
-      const hasTransfer = station.transfers && station.transfers.length > 0;
       const icon = L.divIcon({
         className: "",
         html: `<div style="
-          width:${hasTransfer ? 14 : 10}px;
-          height:${hasTransfer ? 14 : 10}px;
-          background:${hasTransfer ? "#fff" : color};
+          width:10px;
+          height:10px;
+          background:#fff;
           border:2.5px solid ${color};
           border-radius:50%;
-          box-shadow:0 1px 4px rgba(0,0,0,0.5);
+          box-shadow:0 1px 4px rgba(0,0,0,0.6);
         "></div>`,
-        iconSize: [hasTransfer ? 14 : 10, hasTransfer ? 14 : 10],
-        iconAnchor: [hasTransfer ? 7 : 5, hasTransfer ? 7 : 5],
+        iconSize: [10, 10],
+        iconAnchor: [5, 5],
       });
 
       const marker = L.marker([station.lat, station.lng], { icon });
@@ -457,6 +485,58 @@ export default function MapPage() {
         direction: "top",
         className: "metro-tooltip",
         offset: [0, -8],
+      });
+      marker.addTo(layer);
+    });
+
+    // Рисуем пересадочные узлы: ряд цветных кружков в рамке
+    transferGroups.forEach(({ lines, names, lat, lng }) => {
+      const dotSize = 12;
+      const gap = 2;
+      const n = lines.length;
+      const totalW = n * dotSize + (n - 1) * gap;
+      const totalH = dotSize;
+      const padding = 3;
+
+      const dotsHtml = lines.map((lineId, i) => {
+        const c = METRO_LINE_COLORS[lineId] || "#888";
+        return `<div style="
+          width:${dotSize}px;
+          height:${dotSize}px;
+          background:${c};
+          border-radius:50%;
+          border:2px solid #fff;
+          flex-shrink:0;
+          box-shadow:0 1px 3px rgba(0,0,0,0.5);
+        "></div>`;
+      }).join(`<div style="width:${gap}px;"></div>`);
+
+      const html = `<div style="
+        display:flex;
+        align-items:center;
+        background:rgba(20,20,30,0.85);
+        border:1.5px solid rgba(255,255,255,0.5);
+        border-radius:${(totalH + padding * 2) / 2}px;
+        padding:${padding}px ${padding + 1}px;
+        box-shadow:0 2px 6px rgba(0,0,0,0.7);
+        gap:${gap}px;
+      ">${dotsHtml}</div>`;
+
+      const iconW = totalW + (padding + 1) * 2;
+      const iconH = totalH + padding * 2;
+      const icon = L.divIcon({
+        className: "",
+        html,
+        iconSize: [iconW, iconH],
+        iconAnchor: [iconW / 2, iconH / 2],
+      });
+
+      const marker = L.marker([lat, lng], { icon });
+      marker.bindTooltip(names.join(" / "), {
+        permanent: false,
+        direction: "top",
+        className: "metro-tooltip",
+        offset: [0, -(iconH / 2) - 4],
       });
       marker.addTo(layer);
     });
