@@ -111,106 +111,121 @@ interface MetroStation {
   transfers?: string[]; // id других станций на пересадке
 }
 
-// Координаты станций метро СПб (точные)
+// Координаты станций метро СПб (схема 2026)
+// Пересадочные узлы: Невский пр / Гостиный двор / Адмиралтейская (сдвинуты по lng для видимости)
+// Сенная / Садовая / Спасская
+// Технологический институт 1/2
+// Площадь Восстания / Маяковская
+// Владимирская / Достоевская
+// Пушкинская / Звенигородская
+// Пл. Александра Невского 1/2
 const METRO_STATIONS: MetroStation[] = [
-  // Линия 1 — Кировско-Выборгская (красная)
-  { id:"dev",   name:"Девяткино",          line:"1", lat:60.0505, lng:30.4425 },
-  { id:"grazh", name:"Гражданский проспект", line:"1", lat:60.0101, lng:30.4179 },
-  { id:"akad",  name:"Академическая",      line:"1", lat:60.0002, lng:30.4040 },
-  { id:"polit", name:"Политехническая",    line:"1", lat:59.9878, lng:30.3718 },
-  { id:"plmuzh",name:"Площадь Мужества",   line:"1", lat:59.9739, lng:30.3598, transfers:["les"] },
-  { id:"les",   name:"Лесная",             line:"1", lat:59.9848, lng:30.3448, transfers:["plmuzh"] },
-  { id:"vyb",   name:"Выборгская",         line:"1", lat:59.9718, lng:30.3468 },
-  { id:"plleni",name:"Площадь Ленина",     line:"1", lat:59.9563, lng:30.3557 },
-  { id:"che",   name:"Чернышевская",       line:"1", lat:59.9459, lng:30.3597 },
-  { id:"plvos", name:"Площадь Восстания",  line:"1", lat:59.9313, lng:30.3602, transfers:["nevpr"] },
-  { id:"vlad",  name:"Владимирская",       line:"1", lat:59.9261, lng:30.3484, transfers:["dos"] },
-  { id:"pusk",  name:"Пушкинская",         line:"1", lat:59.9218, lng:30.3471, transfers:["zveni"] },
-  { id:"tehinst",name:"Технологический институт", line:"1", lat:59.9160, lng:30.3192, transfers:["tehinst2"] },
-  { id:"balt",  name:"Балтийская",         line:"1", lat:59.9075, lng:30.3017 },
-  { id:"nar",   name:"Нарвская",           line:"1", lat:59.8988, lng:30.2737 },
-  { id:"kzav",  name:"Кировский завод",    line:"1", lat:59.8862, lng:30.2525 },
-  { id:"aut",   name:"Автово",             line:"1", lat:59.8714, lng:30.2616 },
-  { id:"lenpr", name:"Ленинский проспект", line:"1", lat:59.8582, lng:30.2661 },
-  { id:"pvet",  name:"Проспект Ветеранов", line:"1", lat:59.8479, lng:30.2516 },
-  { id:"yuzap", name:"Юго-Западная",       line:"1", lat:59.8367, lng:30.2281 },
+  // ── Линия 1 — Кировско-Выборгская (красная) ──────────────────────────────
+  { id:"dev",      name:"Девяткино",                      line:"1", lat:60.0505, lng:30.4425 },
+  { id:"grazh",    name:"Гражданский проспект",           line:"1", lat:60.0101, lng:30.4179 },
+  { id:"akad",     name:"Академическая",                  line:"1", lat:60.0002, lng:30.4040 },
+  { id:"polit",    name:"Политехническая",                line:"1", lat:59.9878, lng:30.3718 },
+  { id:"plmuzh",   name:"Площадь Мужества",               line:"1", lat:59.9739, lng:30.3598 },
+  { id:"les",      name:"Лесная",                         line:"1", lat:59.9648, lng:30.3468 },
+  { id:"vyb",      name:"Выборгская",                     line:"1", lat:59.9718, lng:30.3468 },
+  { id:"plleni",   name:"Площадь Ленина",                 line:"1", lat:59.9563, lng:30.3557 },
+  { id:"che",      name:"Чернышевская",                   line:"1", lat:59.9459, lng:30.3597 },
+  // Пересадка: Площадь Восстания (Л1) ↔ Маяковская (Л3)
+  { id:"plvos",    name:"Площадь Восстания",              line:"1", lat:59.9313, lng:30.3602, transfers:["mayak"] },
+  { id:"vlad",     name:"Владимирская",                   line:"1", lat:59.9261, lng:30.3484, transfers:["dos"] },
+  { id:"pusk",     name:"Пушкинская",                     line:"1", lat:59.9218, lng:30.3471, transfers:["zveni"] },
+  { id:"tehinst",  name:"Технологический институт 1",     line:"1", lat:59.9165, lng:30.3192, transfers:["tehinst2"] },
+  { id:"balt",     name:"Балтийская",                     line:"1", lat:59.9075, lng:30.3017 },
+  { id:"nar",      name:"Нарвская",                       line:"1", lat:59.8988, lng:30.2737 },
+  { id:"kzav",     name:"Кировский завод",                line:"1", lat:59.8862, lng:30.2525 },
+  { id:"putilv",   name:"Путиловская",                    line:"1", lat:59.8770, lng:30.2460 },
+  { id:"aut",      name:"Автово",                         line:"1", lat:59.8714, lng:30.2616 },
+  { id:"lenpr",    name:"Ленинский проспект",             line:"1", lat:59.8582, lng:30.2661 },
+  { id:"pvet",     name:"Проспект Ветеранов",             line:"1", lat:59.8479, lng:30.2516 },
+  { id:"yuzap",    name:"Юго-Западная",                   line:"1", lat:59.8367, lng:30.2281 },
 
-  // Линия 2 — Московско-Петроградская (синяя)
-  { id:"par",   name:"Парнас",             line:"2", lat:60.0667, lng:30.3232 },
-  { id:"prpr",  name:"Проспект Просвещения", line:"2", lat:60.0504, lng:30.3234 },
-  { id:"ozer",  name:"Озерки",             line:"2", lat:60.0379, lng:30.3222 },
-  { id:"udel",  name:"Удельная",           line:"2", lat:60.0178, lng:30.3127 },
-  { id:"pion",  name:"Пионерская",         line:"2", lat:60.0043, lng:30.2985 },
-  { id:"chre",  name:"Чёрная речка",       line:"2", lat:59.9892, lng:30.2957 },
-  { id:"petro", name:"Петроградская",      line:"2", lat:59.9661, lng:30.3109, transfers:["gor"] },
-  { id:"gor",   name:"Горьковская",        line:"2", lat:59.9551, lng:30.3203, transfers:["petro"] },
-  { id:"nevpr", name:"Невский проспект",   line:"2", lat:59.9355, lng:30.3272, transfers:["plvos","gostdv","spask"] },
-  { id:"senn",  name:"Сенная площадь",     line:"2", lat:59.9267, lng:30.3195, transfers:["sad","spask"] },
-  { id:"tehinst2",name:"Технологический институт (2)", line:"2", lat:59.9160, lng:30.3192, transfers:["tehinst"] },
-  { id:"frunz", name:"Фрунзенская",        line:"2", lat:59.9087, lng:30.3271 },
-  { id:"mvor",  name:"Московские ворота",  line:"2", lat:59.8994, lng:30.3257 },
-  { id:"elektr",name:"Электросила",        line:"2", lat:59.8901, lng:30.3282 },
-  { id:"ppob",  name:"Парк Победы",        line:"2", lat:59.8797, lng:30.3281 },
-  { id:"mos",   name:"Московская",         line:"2", lat:59.8693, lng:30.3236, transfers:["zvez"] },
-  { id:"zvez",  name:"Звёздная",           line:"2", lat:59.8575, lng:30.3455 },
-  { id:"kupc",  name:"Купчино",            line:"2", lat:59.8416, lng:30.3807 },
+  // ── Линия 2 — Московско-Петроградская (синяя) ────────────────────────────
+  { id:"par",      name:"Парнас",                         line:"2", lat:60.0667, lng:30.3232 },
+  { id:"prpr",     name:"Проспект Просвещения",           line:"2", lat:60.0504, lng:30.3234 },
+  { id:"ozer",     name:"Озерки",                         line:"2", lat:60.0379, lng:30.3222 },
+  { id:"udel",     name:"Удельная",                       line:"2", lat:60.0178, lng:30.3127 },
+  { id:"pion",     name:"Пионерская",                     line:"2", lat:60.0043, lng:30.2985 },
+  { id:"chre",     name:"Чёрная речка",                   line:"2", lat:59.9892, lng:30.2957 },
+  { id:"petro",    name:"Петроградская",                  line:"2", lat:59.9661, lng:30.3109 },
+  { id:"gor",      name:"Горьковская",                    line:"2", lat:59.9551, lng:30.3203 },
+  // Пересадочный узел: Невский пр (Л2) / Гостиный двор (Л2) ↔ Садовая/Спасская (Л4,5)
+  { id:"nevpr",    name:"Невский проспект",               line:"2", lat:59.9355, lng:30.3272, transfers:["gostdv","sad","spask"] },
+  { id:"gostdv",   name:"Гостиный двор",                  line:"2", lat:59.9334, lng:30.3300, transfers:["nevpr","sad","spask"] },
+  { id:"senn",     name:"Сенная площадь",                 line:"2", lat:59.9267, lng:30.3210, transfers:["sad","spask"] },
+  { id:"tehinst2", name:"Технологический институт 2",     line:"2", lat:59.9155, lng:30.3192, transfers:["tehinst"] },
+  { id:"frunz",    name:"Фрунзенская",                    line:"2", lat:59.9087, lng:30.3271 },
+  { id:"mvor",     name:"Московские ворота",              line:"2", lat:59.8994, lng:30.3257 },
+  { id:"elektr",   name:"Электросила",                    line:"2", lat:59.8901, lng:30.3282 },
+  { id:"ppob",     name:"Парк Победы",                    line:"2", lat:59.8797, lng:30.3281 },
+  { id:"mos",      name:"Московская",                     line:"2", lat:59.8693, lng:30.3236 },
+  { id:"zvez",     name:"Звёздная",                       line:"2", lat:59.8575, lng:30.3455 },
+  { id:"kupc",     name:"Купчино",                        line:"2", lat:59.8416, lng:30.3807 },
 
-  // Линия 3 — Невско-Василеостровская (зелёная)
-  { id:"primorsk",name:"Приморская",       line:"3", lat:59.9347, lng:30.2202 },
-  { id:"vasil",  name:"Василеостровская",  line:"3", lat:59.9435, lng:30.2744 },
-  { id:"gostdv", name:"Гостиный двор",     line:"3", lat:59.9334, lng:30.3335, transfers:["nevpr","spask"] },
-  { id:"mayak",  name:"Маяковская",        line:"3", lat:59.9316, lng:30.3568 },
-  { id:"plaleks",name:"Площадь Александра Невского", line:"3", lat:59.9237, lng:30.3834 },
-  { id:"elis",   name:"Елизаровская",      line:"3", lat:59.9028, lng:30.4292 },
-  { id:"lom",    name:"Ломоносовская",     line:"3", lat:59.8960, lng:30.4404 },
-  { id:"prolet", name:"Пролетарская",      line:"3", lat:59.8858, lng:30.4698 },
-  { id:"obukhov",name:"Обухово",           line:"3", lat:59.8702, lng:30.4637 },
-  { id:"ryb",    name:"Рыбацкое",          line:"3", lat:59.8310, lng:30.5072 },
+  // ── Линия 3 — Невско-Василеостровская (зелёная) ──────────────────────────
+  { id:"beg",      name:"Беговая",                        line:"3", lat:59.9802, lng:30.2140 },
+  { id:"zenit",    name:"Зенит",                          line:"3", lat:59.9714, lng:30.2309 },
+  { id:"primorsk", name:"Приморская",                     line:"3", lat:59.9500, lng:30.2202 },
+  { id:"vasil",    name:"Василеостровская",               line:"3", lat:59.9435, lng:30.2744 },
+  { id:"admir",    name:"Адмиралтейская",                 line:"3", lat:59.9360, lng:30.3146 },
+  // Пересадка: Маяковская (Л3) ↔ Площадь Восстания (Л1)
+  { id:"mayak",    name:"Маяковская",                     line:"3", lat:59.9316, lng:30.3568, transfers:["plvos"] },
+  // Пересадка: Пл.Александра Невского 1 (Л3) ↔ Пл.Александра Невского 2 (Л4)
+  { id:"plaleks1", name:"Пл. Александра Невского 1",      line:"3", lat:59.9237, lng:30.3834, transfers:["plaleks2"] },
+  { id:"elis",     name:"Елизаровская",                   line:"3", lat:59.9028, lng:30.4292 },
+  { id:"lom",      name:"Ломоносовская",                  line:"3", lat:59.8960, lng:30.4404 },
+  { id:"prolet",   name:"Пролетарская",                   line:"3", lat:59.8858, lng:30.4698 },
+  { id:"obukhov",  name:"Обухово",                        line:"3", lat:59.8702, lng:30.4637 },
+  { id:"ryb",      name:"Рыбацкое",                       line:"3", lat:59.8310, lng:30.5072 },
 
-  // Линия 4 — Правобережная (оранжевая)
-  { id:"spask",  name:"Спасская",          line:"4", lat:59.9258, lng:30.3224, transfers:["senn","sad","gostdv","nevpr"] },
-  { id:"dos",    name:"Достоевская",       line:"4", lat:59.9258, lng:30.3438, transfers:["vlad"] },
-  { id:"ligpr",  name:"Лиговский проспект",line:"4", lat:59.9200, lng:30.3547 },
-  { id:"novoch", name:"Новочеркасская",    line:"4", lat:59.9299, lng:30.4094 },
-  { id:"ladozh", name:"Ладожская",         line:"4", lat:59.9326, lng:30.4393 },
-  { id:"prbol",  name:"Проспект Большевиков", line:"4", lat:59.9210, lng:30.4723 },
-  { id:"udyb",   name:"Улица Дыбенко",     line:"4", lat:59.9143, lng:30.4917 },
+  // ── Линия 4 — Правобережная (оранжевая) ──────────────────────────────────
+  { id:"gorninst", name:"Горный институт",                line:"4", lat:59.9310, lng:30.2787 },
+  // Пересадка: Спасская (Л4) ↔ Садовая (Л5) ↔ Сенная (Л2) ↔ Невский/Гостиный (Л2)
+  { id:"spask",    name:"Спасская",                       line:"4", lat:59.9258, lng:30.3224, transfers:["senn","sad","gostdv","nevpr"] },
+  // Пересадка: Достоевская (Л4) ↔ Владимирская (Л1)
+  { id:"dos",      name:"Достоевская",                    line:"4", lat:59.9267, lng:30.3438, transfers:["vlad"] },
+  { id:"ligpr",    name:"Лиговский проспект",             line:"4", lat:59.9200, lng:30.3547 },
+  { id:"plaleks2", name:"Пл. Александра Невского 2",      line:"4", lat:59.9250, lng:30.3850, transfers:["plaleks1"] },
+  { id:"novoch",   name:"Новочеркасская",                 line:"4", lat:59.9299, lng:30.4094 },
+  { id:"ladozh",   name:"Ладожская",                      line:"4", lat:59.9326, lng:30.4393 },
+  { id:"prbol",    name:"Проспект Большевиков",           line:"4", lat:59.9210, lng:30.4723 },
+  { id:"udyb",     name:"Улица Дыбенко",                  line:"4", lat:59.9143, lng:30.4917 },
 
-  // Линия 5 — Фрунзенско-Приморская (фиолетовая)
-  { id:"komp",   name:"Комендантский проспект", line:"5", lat:60.0024, lng:30.2587 },
-  { id:"stardv", name:"Старая Деревня",    line:"5", lat:59.9905, lng:30.2550 },
-  { id:"krest",  name:"Крестовский остров",line:"5", lat:59.9723, lng:30.2687 },
-  { id:"chkal",  name:"Чкаловская",        line:"5", lat:59.9610, lng:30.2886 },
-  { id:"sport",  name:"Спортивная",        line:"5", lat:59.9523, lng:30.2888 },
-  { id:"admir",  name:"Адмиралтейская",    line:"5", lat:59.9360, lng:30.3146 },
-  { id:"sad",    name:"Садовая",           line:"5", lat:59.9267, lng:30.3195, transfers:["senn","spask"] },
-  { id:"zveni",  name:"Звенигородская",    line:"5", lat:59.9191, lng:30.3352, transfers:["pusk"] },
-  { id:"obv",    name:"Обводный канал",    line:"5", lat:59.9124, lng:30.3572 },
-  { id:"volkov", name:"Волковская",        line:"5", lat:59.8983, lng:30.3806 },
-  { id:"bukhar", name:"Бухарестская",      line:"5", lat:59.8880, lng:30.3798 },
-  { id:"mezhn",  name:"Международная",     line:"5", lat:59.8783, lng:30.3806 },
-  { id:"prslav", name:"Проспект Славы",    line:"5", lat:59.8671, lng:30.4080 },
-  { id:"dunaj",  name:"Дунайская",         line:"5", lat:59.8559, lng:30.4056 },
-  { id:"shush",  name:"Шушары",            line:"5", lat:59.8263, lng:30.4190 },
-
-  // Беговая и Зенит (линия 3, западный отрезок)
-  { id:"beg",    name:"Беговая",           line:"3", lat:59.9802, lng:30.2140 },
-  { id:"zenit",  name:"Зенит",             line:"3", lat:59.9714, lng:30.2309 },
-  
-  // Горный институт (линия 5)
-  { id:"gorninst",name:"Горный институт",  line:"5", lat:59.9333, lng:30.2887 },
-  
-  // Театральная (линия 5)
-  { id:"teatr",  name:"Театральная",       line:"5", lat:59.9297, lng:30.2987 },
+  // ── Линия 5 — Фрунзенско-Приморская (фиолетовая) ─────────────────────────
+  { id:"komp",     name:"Комендантский проспект",         line:"5", lat:60.0024, lng:30.2587 },
+  { id:"stardv",   name:"Старая Деревня",                 line:"5", lat:59.9905, lng:30.2550 },
+  { id:"krest",    name:"Крестовский остров",             line:"5", lat:59.9723, lng:30.2687 },
+  { id:"chkal",    name:"Чкаловская",                     line:"5", lat:59.9610, lng:30.2886 },
+  { id:"sport",    name:"Спортивная",                     line:"5", lat:59.9523, lng:30.2888 },
+  // Пересадка: Садовая (Л5) ↔ Сенная (Л2) ↔ Спасская (Л4)
+  { id:"sad",      name:"Садовая",                        line:"5", lat:59.9267, lng:30.3180, transfers:["senn","spask","nevpr","gostdv"] },
+  // Пересадка: Звенигородская (Л5) ↔ Пушкинская (Л1)
+  { id:"zveni",    name:"Звенигородская",                 line:"5", lat:59.9191, lng:30.3352, transfers:["pusk"] },
+  { id:"obv",      name:"Обводный канал",                 line:"5", lat:59.9124, lng:30.3572 },
+  { id:"volkov",   name:"Волковская",                     line:"5", lat:59.8983, lng:30.3806 },
+  { id:"bukhar",   name:"Бухарестская",                   line:"5", lat:59.8880, lng:30.3798 },
+  { id:"mezhn",    name:"Международная",                  line:"5", lat:59.8783, lng:30.3806 },
+  { id:"prslav",   name:"Проспект Славы",                 line:"5", lat:59.8671, lng:30.4080 },
+  { id:"dunaj",    name:"Дунайская",                      line:"5", lat:59.8559, lng:30.4056 },
+  { id:"shush",    name:"Шушары",                         line:"5", lat:59.8263, lng:30.4190 },
 ];
 
 // Порядок станций для каждой линии (для рисования путей)
 const METRO_LINE_ORDER: Record<string, string[]> = {
-  "1": ["dev","grazh","akad","polit","plmuzh","les","vyb","plleni","che","plvos","vlad","pusk","tehinst","balt","nar","kzav","aut","lenpr","pvet","yuzap"],
-  "2": ["par","prpr","ozer","udel","pion","chre","petro","gor","nevpr","senn","tehinst2","frunz","mvor","elektr","ppob","mos","zvez","kupc"],
-  "3": ["beg","zenit","primorsk","vasil","gostdv","mayak","plaleks","elis","lom","prolet","obukhov","ryb"],
-  "4": ["spask","dos","ligpr","novoch","ladozh","prbol","udyb"],
-  "5": ["komp","stardv","krest","chkal","sport","gorninst","teatr","admir","sad","zveni","obv","volkov","bukhar","mezhn","prslav","dunaj","shush"],
+  // Линия 1 (красная): Девяткино → Юго-Западная
+  "1": ["dev","grazh","akad","polit","plmuzh","les","vyb","plleni","che","plvos","vlad","pusk","tehinst","balt","nar","kzav","putilv","aut","lenpr","pvet","yuzap"],
+  // Линия 2 (синяя): Парнас → Купчино
+  "2": ["par","prpr","ozer","udel","pion","chre","petro","gor","nevpr","gostdv","senn","tehinst2","frunz","mvor","elektr","ppob","mos","zvez","kupc"],
+  // Линия 3 (зелёная): Беговая → Рыбацкое (через Адмиралтейскую, Невский/Гостиный, Маяковскую)
+  "3": ["beg","zenit","primorsk","vasil","admir","nevpr","gostdv","mayak","plaleks1","elis","lom","prolet","obukhov","ryb"],
+  // Линия 4 (оранжевая): Горный институт → Улица Дыбенко
+  "4": ["gorninst","spask","dos","ligpr","plaleks2","novoch","ladozh","prbol","udyb"],
+  // Линия 5 (фиолетовая): Комендантский проспект → Шушары (через Адмиралтейскую, Садовую)
+  "5": ["komp","stardv","krest","chkal","sport","admir","sad","zveni","obv","volkov","bukhar","mezhn","prslav","dunaj","shush"],
 };
 
 // ─── Маршруты ─────────────────────────────────────────────────────────────
@@ -313,8 +328,8 @@ function MetroMapModal({ onClose }: MetroMapModalProps) {
         </div>
         <div className="p-2 overflow-auto max-h-[80vh]">
           <img
-            src="https://cdn.poehali.dev/files/44e73d39-9019-4f17-a281-56b309e8526c.jpg"
-            alt="Схема метро Санкт-Петербурга"
+            src="https://cdn.poehali.dev/projects/8158b767-5bd7-4a0f-b803-9274fb9efd92/bucket/75ba4c17-2523-4023-a422-24ccf6f5aa00.jpg"
+            alt="Схема метро Санкт-Петербурга 2026"
             className="w-full h-auto object-contain rounded"
             style={{ maxHeight: "75vh" }}
           />
@@ -889,13 +904,22 @@ export default function MapPage() {
               </div>
             ))}
             <div className="mt-2 pt-2 border-t border-white/10">
-              <div className="text-white/30 text-xs mb-1.5 font-medium tracking-wider">МЕТРО</div>
-              {Object.entries(METRO_LINE_COLORS).map(([line, color]) => (
-                <div key={line} className="flex items-center gap-2 mb-1">
-                  <div className="w-4 h-1.5 rounded flex-shrink-0" style={{ backgroundColor: color }} />
-                  <span className="text-white/40 text-xs">Линия {line}</span>
-                </div>
-              ))}
+              <div className="text-white/30 text-xs mb-1.5 font-medium tracking-wider">МЕТРО 2026</div>
+              {(Object.entries(METRO_LINE_COLORS) as [string, string][]).map(([line, color]) => {
+                const lineNames: Record<string, string> = {
+                  "1": "Кировско-Выборгская",
+                  "2": "Московско-Петроградская",
+                  "3": "Невско-Василеостровская",
+                  "4": "Правобережная",
+                  "5": "Фрунзенско-Приморская",
+                };
+                return (
+                  <div key={line} className="flex items-center gap-2 mb-1">
+                    <div className="w-4 h-1.5 rounded flex-shrink-0" style={{ backgroundColor: color }} />
+                    <span className="text-white/40 text-xs">{lineNames[line]}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </main>
