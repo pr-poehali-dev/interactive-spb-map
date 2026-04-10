@@ -126,8 +126,8 @@ const METRO_STATIONS: MetroStation[] = [
   { id:"akad",     name:"Академическая",                  line:"1", lat:60.0002, lng:30.4040 },
   { id:"polit",    name:"Политехническая",                line:"1", lat:59.9878, lng:30.3718 },
   { id:"plmuzh",   name:"Площадь Мужества",               line:"1", lat:59.9739, lng:30.3598 },
-  { id:"les",      name:"Лесная",                         line:"1", lat:59.9648, lng:30.3468 },
-  { id:"vyb",      name:"Выборгская",                     line:"1", lat:59.9718, lng:30.3468 },
+  { id:"les",      name:"Лесная",                         line:"1", lat:59.9660, lng:30.3560 },
+  { id:"vyb",      name:"Выборгская",                     line:"1", lat:59.9610, lng:30.3558 },
   { id:"plleni",   name:"Площадь Ленина",                 line:"1", lat:59.9563, lng:30.3557 },
   { id:"che",      name:"Чернышевская",                   line:"1", lat:59.9459, lng:30.3597 },
   // Пересадка: Площадь Восстания (Л1) ↔ Маяковская (Л3)
