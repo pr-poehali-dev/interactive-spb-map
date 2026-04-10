@@ -644,7 +644,7 @@ export default function MapPage() {
 
       {/* TOP BAR */}
       <header className="flex items-center gap-3 px-4 py-2.5 border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur z-50 flex-shrink-0">
-        <a href="/" className="font-oswald font-bold text-xl tracking-wider mr-1">
+        <a href="https://preview--interactive-spb-map.poehali.dev/map" className="font-oswald font-bold text-xl tracking-wider mr-1">
           ПОЕХАЛИ<span className="text-[#f0e020]">.</span>DEV
         </a>
         <div className="w-px h-5 bg-white/20" />
